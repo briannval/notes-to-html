@@ -35,19 +35,28 @@ export default function Home() {
   };
 
   const handleSubmit = async () => {
-    if (!file) return;
-    setLoading(true);
-    const baseUrl = await getBase64(file);
-
-    const res = await axios.post("/api/convert", { image: baseUrl });
-
-    if (res.status !== 200) {
+    if (!file) {
+      console.error("No file selected");
       return;
     }
-
-    const htmlCode = res.data.data.replace("```", "").replace("html", "");
-    handleDownload(htmlCode);
-    setLoading(false);
+    setLoading(true);
+    try {
+      const baseUrl = await getBase64(file);
+      const res = await axios.post("/api/convert", { image: baseUrl });
+      if (res.status !== 200) {
+        console.error(`Request failed with status ${res.status}`);
+        return;
+      }
+      const htmlCode = res.data.data
+        .replace("```", "")
+        .replace("html", "")
+        .trim();
+      handleDownload(htmlCode);
+    } catch (error) {
+      console.error("An error occurred during submission:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
