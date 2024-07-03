@@ -1,4 +1,4 @@
-## Getting Started
+## Notes to HTML!
 
 Convert your notes images to ready-to-view HTML files, easy and fast!
 
